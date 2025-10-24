@@ -1,7 +1,7 @@
 """
-barchart/session.py
+## barchart.utils
 
-Manages the session for making requests to the Barchart API.
+Utility functions and classes.
 """
 import requests
 import threading
@@ -102,3 +102,4 @@ class BarchartSession(requests.Session):
 
 # Create a default session instance
 session = BarchartSession(auto_init=True, auto_refresh_on_401=True)
+
