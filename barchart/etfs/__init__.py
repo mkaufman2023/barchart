@@ -3,6 +3,6 @@
 
 
 """
-from .test import test
+from .test import test_etfs
 
-__all__ = ["test"]
+__all__ = ["test_etfs"]
