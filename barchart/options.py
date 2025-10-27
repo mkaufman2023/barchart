@@ -258,7 +258,6 @@ def get_top_covered_call_ideas() -> list[dict]:
         total  = total,
         fields = data["meta"]["field"],
     )
-    return alldata
-    # data = alldata["data"]
-    # return [item["raw"] for item in data]
+    data = alldata["data"]
+    return [item["raw"] for item in data]
 
