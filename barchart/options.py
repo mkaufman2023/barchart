@@ -199,7 +199,7 @@ def get_most_active() -> list[dict]:
         raise ValueError("No data was found in the response.")
     mao.extend(data["data"])
     total = int(data["total"])
-    # print(f"> Total unusual options activity records: {total}")
+    print(f"> Total 'most active options' records: {total}")
     remaining = total - 300
     if remaining > 0:
         num_pages = remaining // 300 + 1
@@ -217,7 +217,8 @@ def get_most_active() -> list[dict]:
         total  = total,
         fields = data["meta"]["field"],
     )
-    return alldata
+    data = alldata["data"]
+    return [item["raw"] for item in data]
     
     # entries = [UOA_Entry(item) for item in alldata["data"]]
     # entries_dicts = [entry.to_dict() for entry in entries]
