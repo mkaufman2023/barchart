@@ -96,6 +96,24 @@ def get_MAO_url(page: int) -> str:
     return url
 
 
+def get_TCCI_url(page: int) -> str:
+    """
+    Generates a URL for "top covered call ideas" data from Barchart.
+
+    ### Parameters
+    - `page` ( *int* ) - The page number for pagination.
+
+    ### Returns
+    - `str` - The complete URL for the API request.
+    """
+    a = "https://www.barchart.com/proxies/core-api/v1/options/covered-calls?fields=symbol%2CbaseSymbol%2CbaseSymbolType%2CunderlyingLastPrice%2CexpirationDate%2CdaysToExpiration%2Cstrike%2Cmoneyness%2CbidPrice%2CbreakEvenBid%2CpercentToBreakEvenBid%2Cvolume%2CopenInterest%2CimpliedVolatilityRank1y%2Cdelta%2Cflat%2CflatAnnual%2CpotentialReturn%2CbreakEvenProbability%2CexpirationType%2CexpirationDate%2CsymbolCode%2CsymbolType%2ChasOptions&orderBy=flat&orderDir=desc&page="
+    b = "&limit=300&hasOptions=true&raw=1&meta=field.shortName%2Cfield.type%2Cfield.description&between(daysToExpiration,15,60)&in(expirationType,(monthly))&in(baseSymbolType,(1))&between(volume,100,)&between(openInterest,500,)&between(moneyness,,-1)&between(abs%28delta%29,0.2,0.4)&gt(bidPrice,0.05)&ge(tradeTime,previousTradingDay)"
+    url = a + str(page) + b
+    return url
+
+
+
+
 @dataclass
 class UOA_Entry:
     _raw: dict
