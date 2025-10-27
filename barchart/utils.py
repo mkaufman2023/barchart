@@ -13,7 +13,7 @@ from dataclasses import dataclass, field, asdict
 
 def get_UOA_url(page: int) -> str:
     """
-    Generates a URL for fetching unusual options activity data from Barchart.
+    Generates a URL for fetching "unusual options activity" data from Barchart.
 
     ### Parameters
     - `page` ( *int* ) - The page number for pagination.
@@ -49,6 +49,49 @@ def get_UOA_url(page: int) -> str:
     b = "%2C"
     c = ")=&between(volume%2C500%2C)=&between(openInterest%2C100%2C)=&in(exchange%2C(AMEX%2CNYSE%2CNASDAQ%2CINDEX-CBOE))=&meta=field.shortName%2Cfield.type%2Cfield.description&page="
     d = "&limit=300&raw=1"
+    url = a + start_date.strftime("%Y-%m-%d") + b + end_date.strftime("%Y-%m-%d") + c + str(page) + d
+    return url
+
+
+def get_MAO_url(page: int) -> str:
+    """
+    Generates a URL for "most active options" data from Barchart.
+
+    ### Parameters
+    - `page` ( *int* ) - The page number for pagination.
+
+    ### Returns
+    - `str` - The complete URL for the API request.
+    """
+    # Check if today is Saturday or Sunday
+    def is_weekend() -> bool:
+        return datetime.datetime.now().weekday() in [5, 6]
+    
+    def is_saturday() -> bool:
+        return datetime.datetime.now().weekday() == 5
+    
+    def is_sunday() -> bool:
+        return datetime.datetime.now().weekday() == 6
+
+    if is_weekend():
+        # If today is Saturday, set start_date to yesterday
+        if is_saturday():
+            start_date = datetime.datetime.now() - datetime.timedelta(days=1)
+            end_date = start_date + datetime.timedelta(days=3)
+        # If today is Sunday, set start_date to Friday
+        elif is_sunday():
+            start_date = datetime.datetime.now() - datetime.timedelta(days=2)
+        # Set end_date to Monday
+        end_date = start_date + datetime.timedelta(days=3)
+    else:
+        # If today is a weekday, set start_date to today and end_date to tomorrow
+        start_date = datetime.datetime.now()
+        end_date = start_date + datetime.timedelta(days=1)
+    
+    a = "https://www.barchart.com/proxies/core-api/v1/quotes/get?list=options.mostActive.us&fields=symbol%2CsymbolType%2CsymbolName%2ChasOptions%2ClastPrice%2CpriceChange%2CpercentChange%2CoptionsImpliedVolatilityRank1y%2CoptionsImpliedVolatilityPercentile1y%2CoptionsTotalVolume%2CoptionsPutVolumePercent%2CoptionsCallVolumePercent%2CoptionsPutCallVolumeRatio%2CsymbolCode&orderBy=optionsTotalVolume&orderDir=desc&between(lastPrice%2C2.00%2C)=&between(tradeTime%2C"
+    b = "%2C"
+    c = ")=&limit=300&meta=field.shortName%2Cfield.type%2Cfield.description%2Clists.lastUpdate&hasOptions=true&page="
+    d = "&raw=1"
     url = a + start_date.strftime("%Y-%m-%d") + b + end_date.strftime("%Y-%m-%d") + c + str(page) + d
     return url
 
